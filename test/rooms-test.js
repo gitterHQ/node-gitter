@@ -69,4 +69,20 @@ describe('Gitter Rooms', function() {
     });
   });
 
+  it('should be able to listen on a room', function(done) {
+    this.timeout(1000*5);
+
+    gitter.rooms.find('534bfb095e986b0712f0338e').then(function(room) {
+      var events = room.listen();
+
+      events.on('message', function(message) {
+        assert(message.text === 'loopback');
+        done();
+      });
+
+      setTimeout(function() { room.send('loopback'); }, 500);
+    });
+  });
+
+
 });
