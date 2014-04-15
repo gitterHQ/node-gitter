@@ -89,6 +89,7 @@ describe('Gitter Users', function() {
 
   it('should fail when fidning an invalid user with cb', function(done) {
     gitter.users.find('invalid', function(err, user) {
+      assert.equal(user, null);
       assert(err);
       done();
     });
