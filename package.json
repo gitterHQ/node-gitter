@@ -14,7 +14,7 @@
     "gitter"
   ],
   "author": "Mauro Pompilio",
-  "license": "BSD-2-Clause",
+  "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/gitterHQ/node-gitter/issues"
   },
