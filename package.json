@@ -22,7 +22,8 @@
   "dependencies": {
     "q": "~1.0.1",
     "eventemitter2": "~0.4.13",
-    "qs": "~0.6.6"
+    "qs": "~0.6.6",
+    "faye": "~1.0.1"
   },
   "devDependencies": {
     "mocha": "~1.18.2"

@@ -125,6 +125,38 @@ describe('Gitter Rooms', function() {
     });
   });
 
+  it('should be able to subscribe to a room', function(done) {
+    this.timeout(1000*5);
+
+    msg = 'loopback at ' + new Date();
+
+    gitter.rooms.find(yacht_room).then(function(room) {
+
+      // Events snapshot 
+      //var eventz = room.streaming().events();
+      //eventz.on('snapshot', function(snapshot) {
+      //  assert(snapshot.length !== 0);
+      //});
+
+      var events = room.streaming().chatMessages();
+
+      events.on('snapshot', function(snapshot) {
+        assert(snapshot.length !== 0);
+      });
+
+      events.on('chatMessages', function(message) {
+        if (message.model.text === msg) {
+          assert(true);
+          room.streaming().disconnect();
+          done();
+        }
+      });
+
+      setTimeout(function() { room.send(msg); }, 750);
+    });
+  });
+
+
   it('should post to multiple rooms', function(done) {
     this.timeout(1000*10);
 
@@ -150,6 +182,7 @@ describe('Gitter Rooms', function() {
             });
           });
         });
+
       });
     });
   });

@@ -95,6 +95,26 @@ gitter.rooms.join('gitterhq/sandbox')
 
 ```
 
+### Listen for chatMessages, Events or Users in a room
+```
+gitter.rooms.find(roomId).then(function(room) {
+
+  var events = room.streaming().chatMessages();
+
+  // The 'snapshot' event is emitted once, with the last messages in the room
+  events.on('snapshot', function(snapshot) {
+    console.log(snapshot.length + ' messages in the snapshot');
+  });
+
+  // The 'chatMessages' event is emitted on each new message
+  events.on('chatMessages', function(message) {
+    console.log('A message was ' + message.operation);
+    console.log('Text: ', message.model.text);
+  });
+});
+```
+
+
 ### Listen for messages in a room
 ```js
 gitter.rooms.join('gitterhq/sandbox').then(function(room) {
