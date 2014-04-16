@@ -56,7 +56,7 @@ gitter.rooms.join('gitterhq/sandbox', function(err, room) {
 
 ```
 
-## Users API
+## Users
 
 ### Current user
 ```js
@@ -79,7 +79,7 @@ gitter.currentUser()
 gitter.users.find(userId)
 ```
 
-## Rooms API
+## Rooms
 
 ### Join a room
 ```js
@@ -96,7 +96,7 @@ gitter.rooms.join('gitterhq/sandbox')
 ```
 
 ### Listen for chatMessages, Events or Users in a room
-```
+```js
 gitter.rooms.find(roomId).then(function(room) {
 
   var events = room.streaming().chatMessages();
