@@ -20,6 +20,7 @@ describe('Gitter Users', function() {
 
   it('should fetch the current user cb', function(done) {
     gitter.currentUser(function(err, user) {
+      if (err) done(err);
       assert.equal(user.username, 'node-gitter');
       done();
     });
@@ -30,7 +31,7 @@ describe('Gitter Users', function() {
     .then(function(user) {
       assert.equal(user.username, 'node-gitter');
       done();
-    });
+    }).fail(function(err) { done(err); });
   });
 
 
@@ -40,7 +41,7 @@ describe('Gitter Users', function() {
         assert(rooms.length !== 0);
         done();
       });
-    });
+    }).fail(function(err) { done(err); });
   });
 
   it('should fetch the user rooms', function(done) {
@@ -49,7 +50,7 @@ describe('Gitter Users', function() {
         assert(rooms.length !== 0);
         done();
       });
-    });
+    }).fail(function(err) { done(err); });
   });
 
   it('should fetch the user repos', function(done) {
@@ -58,7 +59,7 @@ describe('Gitter Users', function() {
         assert(repos.length !== 0);
         done();
       });
-    });
+    }).fail(function(err) { done(err); });
   });
 
   it('should fetch the user orgs', function(done) {
@@ -67,7 +68,7 @@ describe('Gitter Users', function() {
         assert(orgs.length !== 0);
         done();
       });
-    });
+    }).fail(function(err) { done(err); });
   });
 
   it('should fetch the user channels', function(done) {
@@ -76,7 +77,7 @@ describe('Gitter Users', function() {
         assert(channels.length !== 0);
         done();
       });
-    });
+    }).fail(function(err) { done(err); });
   });
 
   it('should fail when fidning an invalid user', function(done) {
@@ -84,7 +85,7 @@ describe('Gitter Users', function() {
     .then(function() {})
     .fail(function() {
       done();
-    });
+    }).fail(function(err) { done(err); });
   });
 
   it('should fail when fidning an invalid user with cb', function(done) {
@@ -94,7 +95,5 @@ describe('Gitter Users', function() {
       done();
     });
   });
-
-
 
 });
