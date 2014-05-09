@@ -44,15 +44,6 @@ describe('Gitter Users', function() {
     }).fail(function(err) { done(err); });
   });
 
-  it('should fetch the user rooms', function(done) {
-    gitter.currentUser().then(function(user) {
-      user.rooms().then(function(rooms) {
-        assert(rooms.length !== 0);
-        done();
-      });
-    }).fail(function(err) { done(err); });
-  });
-
   it('should fetch the user repos', function(done) {
     gitter.currentUser().then(function(user) {
       user.repos().then(function(repos) {
