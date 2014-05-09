@@ -27,56 +27,49 @@ describe('Gitter Users', function() {
   });
 
   it('should fetch the current user', function(done) {
-    gitter.currentUser()
-    .then(function(user) {
+    gitter.currentUser().then(function(user) {
       assert.equal(user.username, 'node-gitter');
-      done();
-    }).fail(function(err) { done(err); });
+    }).nodeify(done);
   });
-
 
   it('should fetch the user rooms', function(done) {
     gitter.currentUser().then(function(user) {
-      user.rooms().then(function(rooms) {
-        assert(rooms.length !== 0);
-        done();
-      });
-    }).fail(function(err) { done(err); });
+      return user.rooms();
+    }).then(function(rooms) {
+      assert(rooms.length !== 0);
+    }).nodeify(done);
   });
 
   it('should fetch the user repos', function(done) {
     gitter.currentUser().then(function(user) {
-      user.repos().then(function(repos) {
-        assert(repos.length !== 0);
-        done();
-      });
-    }).fail(function(err) { done(err); });
+      return user.repos();
+    }).then(function(repos) {
+      assert(repos.length !== 0);
+    }).nodeify(done);
   });
 
   it('should fetch the user orgs', function(done) {
     gitter.currentUser().then(function(user) {
-      user.orgs().then(function(orgs) {
-        assert(orgs.length !== 0);
-        done();
-      });
-    }).fail(function(err) { done(err); });
+      return user.orgs();
+    }).then(function(orgs) {
+      assert(orgs.length !== 0);
+    }).nodeify(done);
   });
 
   it('should fetch the user channels', function(done) {
     gitter.currentUser().then(function(user) {
-      user.channels().then(function(channels) {
-        assert(channels.length !== 0);
-        done();
-      });
-    }).fail(function(err) { done(err); });
+      return user.channels();
+    }).then(function(channels) {
+      assert(channels.length !== 0);
+    }).nodeify(done);
   });
 
   it('should fail when fidning an invalid user', function(done) {
-    gitter.users.find('invalid')
-    .then(function() {})
-    .fail(function() {
+    gitter.users.find('invalid').then(function() {
+      assert(false);
+    }).fail(function() {
       done();
-    }).fail(function(err) { done(err); });
+    });
   });
 
   it('should fail when fidning an invalid user with cb', function(done) {
