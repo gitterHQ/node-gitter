@@ -1,6 +1,7 @@
 /* jshint node:true, unused:true */
 
 var assert = require('assert');
+var Q = require('q');
 var Gitter = require('../lib/gitter.js');
 
 if (!process.env.TOKEN) {
@@ -32,15 +33,13 @@ describe('Gitter Rooms', function() {
   it('should find a room', function(done) {
     gitter.rooms.find(yacht_room).then(function(room) {
       assert.equal(room.name, 'node-gitter/yacht');
-      done();
-    }).fail(function(err) { done(err); });
+    }).nodeify(done);
   });
 
   it('should be able to join a room', function(done) {
     gitter.rooms.join('node-gitter/yacht').then(function(room) {
       assert.equal(room.name, 'node-gitter/yacht');
-      done();
-    }).fail(function(err) { done(err); });
+    }).nodeify(done);
   });
 
   it('should be able to leave a room', function(done) {
@@ -48,19 +47,18 @@ describe('Gitter Rooms', function() {
     
     // Join the room first
     gitter.rooms.join('node-gitter/yacht').then(function(room) {
-
-      room.leave().then(function() {
-        gitter.currentUser().then(function(user) {
-          user.rooms().then(function(rooms) {
-            var check = rooms.some(function(room) { return room.name === 'node-gitter/yacht'; });
-            assert.equal(false, check);
-
-            // Join the room again for the rest of the tests
-            gitter.rooms.join('node-gitter/yacht').then(function() { done(); });
-          });
-        });
-      });
-    }).fail(function(err) { done(err); });
+      return room.leave();
+    }).then(function() {
+      return gitter.currentUser();
+    }).then(function(user) {
+      return user.rooms();
+    }).then(function(rooms) {
+      var check = rooms.some(function(room) { return room.name === 'node-gitter/yacht'; });
+      assert.equal(false, check);
+    }).fin(function() {
+      // Join the room again for the rest of the tests
+      gitter.rooms.join('node-gitter/yacht');
+    }).nodeify(done);
   });
 
   it('should not be able to join an invalid room', function(done) {
@@ -68,43 +66,39 @@ describe('Gitter Rooms', function() {
     }).fail(function(err) {
       assert(err);
       done();
-    }).fail(function(err) { done(err); });
+    }).fail(done);
   });
 
   it('should be able to send a message', function(done) {
     gitter.rooms.find(yacht_room).then(function(room) {
-      room.send('Time is ' + new Date()).then(function(message) {
-        assert(message);
-        done();
-      });
-    }).fail(function(err) { done(err); });
+      return room.send('Time is ' + new Date());
+    }).then(function(message) {
+      assert(message);
+    }).nodeify(done);
   });
 
   it('should fetch messages from a room', function(done) {
     gitter.rooms.find(yacht_room).then(function(room) {
-      room.chatMessages({limit: 5}).then(function(messages) {
-        assert(messages.length === 5);
-        done();
-      });
-    }).fail(function(err) { done(err); });
+      return room.chatMessages({limit: 5});
+    }).then(function(messages) {
+      assert(messages.length === 5);
+    }).nodeify(done);
   });
 
   it('should fetch users in a room', function(done) {
     gitter.rooms.find(yacht_room).then(function(room) {
-      room.users().then(function(users) {
-        assert(users.some(function(user) { return user.username === 'node-gitter'; }));
-        done();
-      });
-    }).fail(function(err) { done(err); });
+      return room.users();
+    }).then(function(users) {
+      assert(users.some(function(user) { return user.username === 'node-gitter'; }));
+    }).nodeify(done);
   });
 
   it('should fetch channels in a room', function(done) {
     gitter.rooms.find(yacht_room).then(function(room) {
-      room.channels().then(function(channels) {
-        assert(channels.some(function(channel) { return channel.name === 'node-gitter/yacht/pub'; }));
-        done();
-      });
-    }).fail(function(err) { done(err); });
+      return room.channels();
+    }).then(function(channels) {
+      assert(channels.some(function(channel) { return channel.name === 'node-gitter/yacht/pub'; }));
+    }).nodeify(done);
   });
 
   it('should be able to listen on a room', function(done) {
@@ -117,13 +111,12 @@ describe('Gitter Rooms', function() {
 
       events.on('message', function(message) {
         if (message.text === msg) {
-          assert(true);
           done();
         }
       });
 
       setTimeout(function() { room.send(msg); }, 500);
-    }).fail(function(err) { done(err); });
+    }).fail(done);
   });
 
   it('should be able to subscribe to a room', function(done) {
@@ -147,14 +140,13 @@ describe('Gitter Rooms', function() {
 
       events.on('chatMessages', function(message) {
         if (message.model.text === msg) {
-          assert(true);
           room.streaming().disconnect();
           done();
         }
       });
 
       setTimeout(function() { room.send(msg); }, 750);
-    }).fail(function(err) { done(err); });
+    }).fail(done);
   });
 
 
@@ -164,28 +156,35 @@ describe('Gitter Rooms', function() {
     var fst_msg = 'ping at ' + new Date();
     var snd_msg = 'pong at ' + new Date();
 
-    gitter.rooms.find(yacht_pub_channel).then(function(room) {
+    var fst_promise = gitter.rooms.find(yacht_pub_channel).then(function(room) {
       assert.equal(room.name, 'node-gitter/yacht/pub');
-
-      gitter.rooms.find(yacht_room).then(function(_room) {
-        assert.equal(_room.name, 'node-gitter/yacht');
-
-        room.send(fst_msg).then(function() {
-          _room.send(snd_msg).then(function() {
-
-            room.chatMessages().then(function(messages) {
-              assert(messages.some(function(msg) { return msg.text === fst_msg; }));
-
-              _room.chatMessages().then(function(_messages) {
-                assert(_messages.some(function(msg) { return msg.text === snd_msg; }));
-                done();
-              });
-            });
-          });
-        });
-
+      return room;
+    }).then(function(room) {
+      room.send(fst_msg);
+      return room;
+    }).then(function(room) {
+      return Q.delay(1000).then(function() {
+        return room.chatMessages();
       });
-    }).fail(function(err) { done(err); });
+    }).then(function(messages) {
+      assert(messages.some(function(msg) { return msg.text === fst_msg; }));
+    });
+
+    var snd_promise = gitter.rooms.find(yacht_room).then(function(room) {
+      assert.equal(room.name, 'node-gitter/yacht');
+      return room;
+    }).then(function(room) {
+      room.send(snd_msg);
+      return room;
+    }).then(function(room) {
+      return Q.delay(1000).then(function() {
+        return room.chatMessages();
+      });
+    }).then(function(messages) {
+      assert(messages.some(function(msg) { return msg.text === snd_msg; }));
+    });
+
+    Q.all([fst_promise, snd_promise]).nodeify(done);
   });
 
 });
