@@ -15,4 +15,4 @@ test:
 	npm test
 
 security-check:
-	./node_modules/.bin/retire  --ignore /Users/andrewn/code/gitter/badges/node_modules/gitter-env/node_modules/winston/node_modules/request/node_modules/qs/test/browser/jquery.js
+	./node_modules/.bin/retire -n
