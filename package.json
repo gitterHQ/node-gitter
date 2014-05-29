@@ -1,6 +1,6 @@
 {
   "name": "node-gitter",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Gitter client",
   "main": "lib/gitter.js",
   "scripts": {
