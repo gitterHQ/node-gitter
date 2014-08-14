@@ -3,15 +3,20 @@
 var assert = require('assert');
 var Gitter = require('../lib/gitter.js');
 
-if (!process.env.TOKEN) {
+var token = process.env.TOKEN;
+var username = process.env.USERNAME || 'node-gitter';
+
+if (!token) {
   console.log('========================================');
   console.log('You need to provide a valid OAuth token:');
-  console.log('$ TOKEN=<your_token> npm test');
+  console.log('$ TOKEN=<your_token> USERNAME=<your_github_username> npm test');
   console.log('========================================\n');
   process.exit(1);
 }
 
 describe('Gitter Users', function() {
+  this.timeout(5000);
+
   var gitter;
 
   before(function() {
@@ -21,14 +26,14 @@ describe('Gitter Users', function() {
   it('should fetch the current user cb', function(done) {
     gitter.currentUser(function(err, user) {
       if (err) done(err);
-      assert.equal(user.username, 'node-gitter');
+      assert.equal(user.username, username);
       done();
     });
   });
 
   it('should fetch the current user', function(done) {
     gitter.currentUser().then(function(user) {
-      assert.equal(user.username, 'node-gitter');
+      assert.equal(user.username, username);
     }).nodeify(done);
   });
 

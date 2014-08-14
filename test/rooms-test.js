@@ -4,18 +4,21 @@ var assert = require('assert');
 var Q = require('q');
 var Gitter = require('../lib/gitter.js');
 
-if (!process.env.TOKEN) {
+var token = process.env.TOKEN;
+
+if (!token) {
   console.log('========================================');
   console.log('You need to provide a valid OAuth token:');
-  console.log('$ TOKEN=<your_token> npm test');
+  console.log('$ TOKEN=<your_token> USERNAME=<your_github_username> npm test');
   console.log('========================================\n');
   process.exit(1);
 }
 
+
 var yacht_room        = '534bfb095e986b0712f0338e';
-var yacht_pub_channel = '534d120f5e986b0712f034be';
 
 describe('Gitter Rooms', function() {
+  this.timeout(10000);
   var gitter;
 
   before(function() {
@@ -43,8 +46,6 @@ describe('Gitter Rooms', function() {
   });
 
   it('should be able to leave a room', function(done) {
-    this.timeout(10*1000);
-    
     // Join the room first
     gitter.rooms.join('node-gitter/yacht').then(function(room) {
       return room.leave();
@@ -102,8 +103,6 @@ describe('Gitter Rooms', function() {
   });
 
   it('should be able to listen on a room', function(done) {
-    this.timeout(1000*5);
-
     var msg = '[streaming] ' + new Date();
 
     gitter.rooms.find(yacht_room).then(function(room) {
@@ -120,13 +119,11 @@ describe('Gitter Rooms', function() {
   });
 
   it('should be able to subscribe to a room', function(done) {
-    this.timeout(1000*5);
-
     var msg = '[faye] ' + new Date();
 
     gitter.rooms.find(yacht_room).then(function(room) {
 
-      // Events snapshot 
+      // Events snapshot
       //var eventz = room.streaming().events();
       //eventz.on('snapshot', function(snapshot) {
       //  assert(snapshot.length !== 0);
@@ -151,40 +148,28 @@ describe('Gitter Rooms', function() {
 
 
   it('should post to multiple rooms', function(done) {
-    this.timeout(1000*10);
+    function postMessageInRoom(roomUri, message) {
+      return gitter.rooms.join(roomUri)
+        .then(function(room) {
+          room.send(message);
+          return room;
+        })
+        .delay(1000)
+        .then(function(room) {
+          return room.chatMessages({ limit: 2 });
+        })
+        .then(function(messages) {
+          assert(messages.some(function(msg) {
+            return msg.text === message;
+          }), "Expecting to see posted message");
+        });
+    }
 
-    var fst_msg = 'ping at ' + new Date();
-    var snd_msg = 'pong at ' + new Date();
-
-    var fst_promise = gitter.rooms.find(yacht_pub_channel).then(function(room) {
-      assert.equal(room.name, 'node-gitter/yacht/pub');
-      return room;
-    }).then(function(room) {
-      room.send(fst_msg);
-      return room;
-    }).then(function(room) {
-      return Q.delay(1000).then(function() {
-        return room.chatMessages();
-      });
-    }).then(function(messages) {
-      assert(messages.some(function(msg) { return msg.text === fst_msg; }));
-    });
-
-    var snd_promise = gitter.rooms.find(yacht_room).then(function(room) {
-      assert.equal(room.name, 'node-gitter/yacht');
-      return room;
-    }).then(function(room) {
-      room.send(snd_msg);
-      return room;
-    }).then(function(room) {
-      return Q.delay(1000).then(function() {
-        return room.chatMessages();
-      });
-    }).then(function(messages) {
-      assert(messages.some(function(msg) { return msg.text === snd_msg; }));
-    });
-
-    Q.all([fst_promise, snd_promise]).nodeify(done);
+    Q.all([
+        postMessageInRoom('node-gitter/yacht', 'yacht repo ping at ' + new Date()),
+        postMessageInRoom('node-gitter/yacht/pub', 'yacht pub channel ping at ' + new Date()),
+      ])
+      .nodeify(done);
   });
 
 });
