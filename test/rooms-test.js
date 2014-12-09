@@ -14,15 +14,25 @@ if (!token) {
   process.exit(1);
 }
 
-
-var yacht_room        = '534bfb095e986b0712f0338e';
+var yacht_room = '534bfb095e986b0712f0338e';
 
 describe('Gitter Rooms', function() {
-  this.timeout(10000);
+  this.timeout(20000);
   var gitter;
 
   before(function() {
-    gitter = new Gitter(process.env.TOKEN);
+    var opts = {};
+
+    //var opts = {
+    //  client: {
+    //    host: "localhost",
+    //    port: 5000,
+    //    prefix: true,
+    //    streamingEndpoint: 'http://localhost:5000/faye'
+    //  }
+    //};
+
+    gitter = new Gitter(process.env.TOKEN, opts);
   });
 
   it('should find a room with cb', function(done) {
