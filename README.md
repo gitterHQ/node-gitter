@@ -1,5 +1,7 @@
 # node-gitter [![Gitter chat](https://badges.gitter.im/gitterhq/node-gitter.png)](https://gitter.im/gitterhq/node-gitter)
 
+[![Join the chat at https://beta.gitter.im/gitterHQ/node-gitter](https://badges-beta.gitter.im/Join%20Chat.svg)](https://beta.gitter.im/gitterHQ/node-gitter?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Node.js client for the [Gitter](https://gitter.im) API. For more info visit: [Gitter Developers website](https://developer.gitter.im).
 
 If you have any questions, click on the badge to join the conversation.
