@@ -58,7 +58,10 @@ describe('Gitter Rooms', function() {
   it('should be able to leave a room', function(done) {
     // Join the room first
     gitter.rooms.join('node-gitter/yacht').then(function(room) {
-      return room.leave();
+      return gitter.currentUser()
+      .then(function(currentUser) {
+        return room.removeUser(currentUser.id);
+      });
     }).then(function() {
       return gitter.currentUser();
     }).then(function(user) {
