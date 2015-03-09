@@ -91,6 +91,14 @@ describe('Gitter Rooms', function() {
     }).nodeify(done);
   });
 
+  it('should be able to send a status message', function(done) {
+    gitter.rooms.find(yacht_room).then(function(room) {
+      return room.sendStatus('Yo! checking time is ' + new Date());
+    }).then(function(message) {
+      assert(message.status);
+    }).nodeify(done);
+  });
+
   it('should fetch messages from a room', function(done) {
     gitter.rooms.find(yacht_room).then(function(room) {
       return room.chatMessages({limit: 5});
