@@ -99,7 +99,6 @@ describe('Gitter Rooms', function() {
     }).nodeify(done);
   });
 
-
   it('should fetch messages from a room', function(done) {
     gitter.rooms.find(yacht_room).then(function(room) {
       return room.chatMessages({limit: 5});
