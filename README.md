@@ -114,18 +114,6 @@ gitter.rooms.find(roomId).then(function(room) {
 });
 ```
 
-
-### Listen for messages in a room
-```js
-gitter.rooms.join('gitterhq/sandbox').then(function(room) {
-  var events = room.listen();
-
-  events.on('message', function(message) {
-    console.log('New message:', message.text);
-  });
-});
-```
-
 ### Room users, channels and messages
 ```js
 gitter.rooms.find(roomId)
