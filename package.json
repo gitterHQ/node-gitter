@@ -20,15 +20,16 @@
   },
   "homepage": "https://github.com/gitterHQ/node-gitter",
   "dependencies": {
-    "debug": "^0.8.1",
+    "bluebird": "^3.1.1",
+    "debug": "^2.2.0",
     "eventemitter3": "^0.1.6",
-    "faye": "~1.0.1",
     "gitter-faye": "^1.1.0-e",
+    "halley": "^0.3.2",
     "q": "~1.0.1",
     "qs": "~1.2.1"
   },
   "devDependencies": {
-    "mocha": "~1.18.2",
-    "retire": "latest"
+    "mocha": "^2.3.4",
+    "retire": "^1.1.2"
   }
 }
