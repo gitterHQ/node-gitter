@@ -69,7 +69,7 @@ describe('Gitter Rooms', function() {
     }).then(function(rooms) {
       var check = rooms.some(function(room) { return room.name === 'node-gitter/yacht'; });
       assert.equal(false, check);
-    }).fin(function() {
+    }).finally(function() {
       // Join the room again for the rest of the tests
       gitter.rooms.join('node-gitter/yacht');
     }).nodeify(done);
@@ -77,10 +77,10 @@ describe('Gitter Rooms', function() {
 
   it('should not be able to join an invalid room', function(done) {
     gitter.rooms.join('some-invalid-room').then(function() {
-    }).fail(function(err) {
+    }).catch(function(err) {
       assert(err);
       done();
-    }).fail(done);
+    }).catch(done);
   });
 
   it('should be able to send a message', function(done) {
@@ -136,7 +136,7 @@ describe('Gitter Rooms', function() {
       });
 
       setTimeout(function() { room.send(msg); }, 500);
-    }).fail(done);
+    }).catch(done);
   });
 
   it('should be able to subscribe to a room', function(done) {
@@ -164,7 +164,7 @@ describe('Gitter Rooms', function() {
       });
 
       setTimeout(function() { room.send(msg); }, 750);
-    }).fail(done);
+    }).catch(done);
   });
 
 
