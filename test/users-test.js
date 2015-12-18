@@ -72,7 +72,7 @@ describe('Gitter Users', function() {
   it('should fail when fidning an invalid user', function(done) {
     gitter.users.find('invalid').then(function() {
       assert(false);
-    }).fail(function() {
+    }).catch(function() {
       done();
     });
   });
