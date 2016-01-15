@@ -2,7 +2,7 @@
   "name": "node-gitter",
   "version": "1.2.9",
   "description": "Gitter client",
-  "main": "lib/gitter.js",
+  "main": "lib/client.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha -R spec test"
   },
@@ -20,15 +20,18 @@
   },
   "homepage": "https://github.com/gitterHQ/node-gitter",
   "dependencies": {
+    "bluebird": "^3.1.1",
+    "create-error": "^0.3.1",
     "debug": "^0.8.1",
-    "eventemitter3": "^0.1.6",
-    "faye": "~1.0.1",
-    "gitter-faye": "^1.1.0-e",
-    "q": "~1.0.1",
-    "qs": "~1.2.1"
+    "lodash": "^4.0.0",
+    "request": "^2.67.0",
+    "request-extensible": "^0.1.1",
+    "require-directory": "^2.1.1",
+    "tentacles": "^0.2.8"
   },
   "devDependencies": {
-    "mocha": "~1.18.2",
-    "retire": "latest"
+    "gulp": "^3.9.0",
+    "gulp-spawn-mocha": "^2.2.2",
+    "mocha": "^2.3.4"
   }
 }
