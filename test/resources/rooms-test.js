@@ -1,17 +1,20 @@
-var Client = require('../..');
+'use strict';
+
 var assert = require('assert');
+var testUtils = require('../utils');
 
 describe('rooms', function() {
   var client;
+  var userId;
   var roomId;
 
   before(function() {
     assert(process.env.GITTER_ACCESS_TOKEN, 'Please set GITTER_ACCESS_TOKEN');
-
-    client = new Client({ accessToken: process.env.GITTER_ACCESS_TOKEN });
-    return client.rooms.listForAuthUser()
-      .then(function(rooms) {
-        roomId = rooms[0].id;
+    return testUtils.setup()
+      .spread(function(_client, _userId, _roomId) {
+        client = _client;
+        userId = _userId;
+        roomId = _roomId;
       });
   });
 
@@ -19,20 +22,6 @@ describe('rooms', function() {
     return client.rooms.listForAuthUser()
       .then(function(rooms) {
         assert(rooms[0].name);
-      })
-  });
-
-  it('should list the users in a room', function() {
-    return client.rooms.listUsers(roomId)
-      .then(function(users) {
-        assert(Array.isArray(users));
-      })
-  });
-
-  it('should list the channels in a room', function() {
-    return client.rooms.listChannels(roomId)
-      .then(function(channels) {
-        assert(Array.isArray(channels));
       })
   });
 
@@ -44,4 +33,10 @@ describe('rooms', function() {
       });
   });
 
+  it("should list a user's rooms", function() {
+    return client.rooms.listForUser(userId)
+      .then(function(rooms) {
+        assert(Array.isArray(rooms));
+      });
+  });
 });

@@ -1,26 +1,20 @@
-var Client = require('../..');
+'use strict';
+
 var assert = require('assert');
+var testUtils = require('../utils');
 
 describe('messages', function() {
   var client;
   var userId;
-  var username;
   var roomId;
 
   before(function() {
     assert(process.env.GITTER_ACCESS_TOKEN, 'Please set GITTER_ACCESS_TOKEN');
-
-    client = new Client({ accessToken: process.env.GITTER_ACCESS_TOKEN });
-
-    return client.users.getAuthUser()
-      .then(function(user) {
-        userId = user.id;
-        username = user.username;
-        uri = username+'/test';
-        return client.rooms.join({uri: uri})
-      })
-      .then(function(room) {
-        roomId = room.id;
+    return testUtils.setup()
+      .spread(function(_client, _userId, _roomId) {
+        client = _client;
+        userId = _userId;
+        roomId = _roomId;
       });
   });
 
