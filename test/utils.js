@@ -5,9 +5,10 @@ function setup() {
   return client.users.getAuthUser()
     .then(function(user) {
       var userId = user.id;
-      return client.rooms.listForUser(userId)
-        .then(function(rooms) {
-          var roomId = rooms[0].id;
+      var uri = user.username + '/test';
+      return client.rooms.join({uri: uri})
+        .then(function(room) {
+          var roomId = room.id;
           return [client, userId, roomId];
         });
     });
