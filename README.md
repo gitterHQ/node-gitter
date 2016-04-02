@@ -128,7 +128,10 @@ gitter.rooms.find(roomId)
 ```js
 gitter.rooms.find(roomId)
 .then(function(room) {
-  room.leave()
+  gitter.currentUser()
+    .then(function(currentUser) {
+      return room.removeUser(currentUser.id);
+    });
 });
 ```
 
