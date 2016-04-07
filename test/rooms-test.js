@@ -28,7 +28,7 @@ describe('Gitter Rooms', function() {
     //    host: "localhost",
     //    port: 5000,
     //    prefix: true,
-    //    streamingEndpoint: 'http://localhost:5000/faye'
+    //    streamingEndpoint: 'http://localhost:5000/bayeux'
     //  }
     //};
 
@@ -163,7 +163,7 @@ describe('Gitter Rooms', function() {
         }
       });
 
-      setTimeout(function() { room.send(msg); }, 750);
+      setTimeout(function() { room.send(msg); }, 2000);
     }).fail(done);
   });
 
