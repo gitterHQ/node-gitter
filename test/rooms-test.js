@@ -115,14 +115,6 @@ describe('Gitter Rooms', function() {
     }).nodeify(done);
   });
 
-  it('should fetch channels in a room', function(done) {
-    gitter.rooms.find(yacht_room).then(function(room) {
-      return room.channels();
-    }).then(function(channels) {
-      assert(channels.some(function(channel) { return channel.name === 'node-gitter/yacht/pub'; }));
-    }).nodeify(done);
-  });
-
   it('should be able to listen on a room', function(done) {
     var msg = '[streaming] ' + new Date();
 
