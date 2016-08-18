@@ -61,14 +61,6 @@ describe('Gitter Users', function() {
     }).nodeify(done);
   });
 
-  it('should fetch the user channels', function(done) {
-    gitter.currentUser().then(function(user) {
-      return user.channels();
-    }).then(function(channels) {
-      assert(channels.length !== 0);
-    }).nodeify(done);
-  });
-
   it('should fail when fidning an invalid user', function(done) {
     gitter.users.find('invalid').then(function() {
       assert(false);
