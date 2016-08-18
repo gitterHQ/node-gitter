@@ -63,14 +63,13 @@ gitter.rooms.join('gitterhq/sandbox', function(err, room) {
 gitter.currentUser()
 ```
 
-### Current user rooms, repos, orgs and channels
+### Current user rooms, repos, and orgs
 ```js
 gitter.currentUser()
 .then(function(user) {
   user.rooms()
   user.repos()
   user.orgs()
-  user.channels()
 })
 ```
 
@@ -114,12 +113,11 @@ gitter.rooms.find(roomId).then(function(room) {
 });
 ```
 
-### Room users, channels and messages
+### Room users and messages
 ```js
 gitter.rooms.find(roomId)
 .then(function(room) {
   room.users()
-  room.channels()
   room.chatMessages()
 });
 ```
