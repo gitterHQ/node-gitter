@@ -9,7 +9,7 @@ var token = process.env.TOKEN;
 if (!token) {
   console.log('========================================');
   console.log('You need to provide a valid OAuth token:');
-  console.log('$ TOKEN=<your_token> USERNAME=<your_github_username> npm test');
+  console.log('$ TOKEN=<your_token> GITTER_USERNAME=<your_gitter_username> npm test');
   console.log('========================================\n');
   process.exit(1);
 }

@@ -4,12 +4,12 @@ var assert = require('assert');
 var Gitter = require('../lib/gitter.js');
 
 var token = process.env.TOKEN;
-var username = process.env.USERNAME || 'node-gitter';
+var username = process.env.GITTER_USERNAME || 'node-gitter';
 
 if (!token) {
   console.log('========================================');
   console.log('You need to provide a valid OAuth token:');
-  console.log('$ TOKEN=<your_token> USERNAME=<your_github_username> npm test');
+  console.log('$ TOKEN=<your_token> GITTER_USERNAME=<your_gitter_username> npm test');
   console.log('========================================\n');
   process.exit(1);
 }
