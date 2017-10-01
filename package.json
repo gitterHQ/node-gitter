@@ -4,7 +4,8 @@
   "description": "Gitter client",
   "main": "lib/gitter.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha -R spec test"
+    "mocha": "mocha",
+    "test": "mocha -R spec test"
   },
   "repository": {
     "type": "git",
